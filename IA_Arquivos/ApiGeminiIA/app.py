@@ -7,12 +7,10 @@ import pandas as pd
 import sqlite3
 import xml.etree.ElementTree as XmlParser
 
-# Inicializar o Flask e configurar CORS
 app = Flask(__name__)
 CORS(app)
-ai_gpt.configure(api_key='AIzaSyDgaiDqmjd4aScETKWkChUjz8XsL7AlFKU')
+ai_gpt.configure(api_key='AIzaSyCapOMt_DGXzPznbcJNE1O-288D0Ng224Q')
 
-# Função para inicializar o banco de dados SQLite
 def criar_db():
     conexao = sqlite3.connect('banco_dados.db')
     cursor = conexao.cursor()
@@ -38,7 +36,6 @@ def criar_db():
     conexao.commit()
     conexao.close()
 
-# Função para classificar conteúdo usando o modelo generativo do Google
 def classificar_arquivo(conteudo_texto):
     try:
         modelo = ai_gpt.GenerativeModel('gemini-1.0-pro')
@@ -56,7 +53,6 @@ def classificar_arquivo(conteudo_texto):
     except Exception as erro:
         return f"Erro ao classificar: {str(erro)}"
 
-# Rota para classificar o conteúdo do arquivo
 @app.route('/analise', methods=['POST'])
 def rota_classificar():
     if 'file' not in request.files:
@@ -65,7 +61,6 @@ def rota_classificar():
     arquivo = request.files['file']
     tipo_arquivo = arquivo.filename.split('.')[-1]
 
-    # Processar o arquivo baseado no tipo
     try:
         if tipo_arquivo == 'csv':
             dados = pd.read_csv(arquivo)
@@ -90,19 +85,16 @@ def rota_classificar():
     except Exception as erro:
         return jsonify({"erro": f"Falha ao processar o arquivo: {str(erro)}"}), 400
 
-    # Classificar conteúdo do arquivo
     conteudo = dados.to_string()
     categoria = classificar_arquivo(conteudo)
 
     return jsonify({"classificacao": categoria})
 
-# Rota para realizar upload e salvar dados
 @app.route('/enviar', methods=['POST'])
 def rota_upload():
     arquivo = request.files['file']
     tipo_arquivo = arquivo.filename.split('.')[-1]
 
-    # Processar o arquivo de acordo com o tipo
     if tipo_arquivo == 'csv':
         dados = pd.read_csv(arquivo)
     elif tipo_arquivo == 'json':
@@ -127,7 +119,6 @@ def rota_upload():
     else:
         return jsonify({"erro": "Tipo de arquivo não suportado"}), 400
 
-    # Verificar se o arquivo já existe no banco
     conexao = sqlite3.connect('banco_dados.db')
     cursor = conexao.cursor()
     cursor.execute('''
@@ -139,7 +130,6 @@ def rota_upload():
         conexao.close()
         return jsonify({"mensagem": "Este arquivo já foi carregado."}), 409
 
-    # Inserir metadados e conteúdo no banco
     colunas = ', '.join(dados.columns)
     metadados = {
         "timestamp": datetime.now(),
@@ -154,7 +144,6 @@ def rota_upload():
     ''', (metadados["timestamp"], metadados["nome_arquivo"], metadados["tipo_arquivo"], metadados["cabecalhos"]))
     id_metadado = cursor.lastrowid
 
-    # Inserir conteúdo na tabela associada
     for _, linha in dados.iterrows():
         for coluna in dados.columns:
             cursor.execute('''
@@ -167,7 +156,6 @@ def rota_upload():
 
     return jsonify({"mensagem": "Arquivo salvo com sucesso."}), 200
 
-# Rota para buscar todos os metadados
 @app.route('/metadados', methods=['GET'])
 def listar_metadados():
     conexao = sqlite3.connect('banco_dados.db')
@@ -177,7 +165,6 @@ def listar_metadados():
     conexao.close()
     return jsonify(resultado)
 
-# Rota para buscar dados específicos por ID
 @app.route('/conteudos/<int:id_metadado>', methods=['GET'])
 def obter_conteudo(id_metadado):
     conexao = sqlite3.connect('banco_dados.db')
@@ -187,7 +174,6 @@ def obter_conteudo(id_metadado):
     conexao.close()
     return jsonify(conteudos)
 
-# Inicializar o banco e rodar o servidor
 if __name__ == '__main__':
     criar_db()
     app.run(debug=True)
