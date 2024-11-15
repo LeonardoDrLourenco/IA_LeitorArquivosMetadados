@@ -1,4 +1,3 @@
-// Função para enviar o formulário de upload
 document.getElementById('uploadForm').onsubmit = async (event) => {
     event.preventDefault();
 
@@ -6,7 +5,6 @@ document.getElementById('uploadForm').onsubmit = async (event) => {
     formData.append('file', document.getElementById('fileInput').files[0]);
 
     try {
-        // Faz a requisição POST para o endpoint /enviar
         const response = await fetch('http://127.0.0.1:5000/enviar', {
             method: 'POST',
             body: formData
@@ -15,10 +13,8 @@ document.getElementById('uploadForm').onsubmit = async (event) => {
         if (response.ok) {
             alert("Arquivo enviado com sucesso!");
             
-            // Chama a função para classificar o arquivo enviado
             await classificarArquivo(formData);
             
-            // Atualiza os metadados
             carregarMetadados(); 
         } else if (response.status === 409) {
             alert("O arquivo já foi enviado anteriormente.");
@@ -32,17 +28,13 @@ document.getElementById('uploadForm').onsubmit = async (event) => {
     }
 };
 
-// Evento para exibir o nome do arquivo selecionado
 document.getElementById('fileInput').addEventListener('change', (event) => {
     const fileName = event.target.files[0]?.name || 'Nenhum arquivo selecionado';
     document.getElementById('file-name').textContent = `Arquivo selecionado: ${fileName}`;
 });
 
-
-// Função para classificar o conteúdo do arquivo usando a API do Gemini
 async function classificarArquivo(formData) {
     try {
-        // Faz a requisição POST para o endpoint /analise
         const response = await fetch('http://127.0.0.1:5000/analise', {
             method: 'POST',
             body: formData
@@ -61,7 +53,6 @@ async function classificarArquivo(formData) {
     }
 }
 
-// Função para obter e exibir os metadados
 async function carregarMetadados() {
     try {
         const response = await fetch('http://127.0.0.1:5000/metadados');
@@ -88,7 +79,6 @@ async function carregarMetadados() {
     }
 }
 
-// Função para buscar e exibir dados detalhados com base no ID do metadado
 async function buscarConteudo(metadado_id) {
     try {
         const response = await fetch(`http://127.0.0.1:5000/conteudos/${metadado_id}`);
@@ -112,5 +102,4 @@ async function buscarConteudo(metadado_id) {
     }
 }
 
-// Carregar os metadados ao carregar a página
 carregarMetadados();
