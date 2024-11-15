@@ -1,0 +1,16 @@
+<Metadado>
+  <id>1</id>
+  <data>2024-11-15T00:00:00</data>
+  <nomeArquivo>arquivoXml.xml</nomeArquivo>
+  <formatoarquivo>xml</formatoarquivo>
+  <colunas>
+    <coluna>
+      <nomeColuna>nome</nomeColuna>
+      <tipoDado>string</tipoDado>
+    </coluna>
+    <coluna>
+      <nomeColuna>idade</nomeColuna>
+      <tipoDado>int</tipoDado>
+    </coluna>
+  </colunas>
+</Metadado>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Upload</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Data Upload</h1>
+
+        <form id="uploadForm" class="upload-form">
+            <label for="fileInput" class="file-label">Selecione um arquivo</label>
+            <input type="file" id="fileInput" name="file" class="file-input" required>
+            <p id="file-name">Nenhum arquivo selecionado</p> 
+            <button type="submit" class="btn">Upload</button>
+        </form>
+        
+
+        <div class="content-section">
+            <h2>Metadados</h2>
+            <div id="metadados" class="metadata-container"></div>
+        </div>
+
+        <div class="content-section">
+            <h2>Dados</h2>
+            <div id="dados" class="data-table-container">
+                <table id="data-table">
+                    <thead>
+                        <tr>
+                            <th>Nome da Coluna</th>
+                            <th>Tipo de Dado</th>
+                            <th>Valor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Dados serão inseridos aqui -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

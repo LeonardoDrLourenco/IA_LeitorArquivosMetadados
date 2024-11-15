@@ -1,0 +1,14 @@
+id: 1
+data: 2024-11-15T00:00:00
+nomeArquivo: arquivoTxt.txt
+formatoarquivo: txt
+colunas: [
+  {
+    "nomeColuna": "nome",
+    "tipoDado": "string"
+  },
+  {
+    "nomeColuna": "idade",
+    "tipoDado": "int"
+  }
+]
